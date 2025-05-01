@@ -566,73 +566,30 @@ Logtalk предоставляет шесть наборов встроенны�
 ``declares(Predicate, Properties)``
    Список :ref:`properties <grammar_entity_properties>` для некоторого предиката, заданного в объекте
 ``defines(Predicate, Properties)``
-   List of :ref:`properties <grammar_entity_properties>` for a predicate defined by the object
+   Список грамматических сущностей :ref:`properties <grammar_entity_properties>` для некоторого предиката, заданного в объекте
 ``includes(Predicate, Entity, Properties)``
-   Список :ref:`properties <grammar_entity_properties>` для многофайловых предикатов
-   в указанном объекте (свойства включают
-   ``number_of_clauses(Number)``, ``number_of_rules(Number)`` и
-   ``line_count(Line)``, значение ``Line`` будет соответствовать
-   первой фразе многофайлового предиката)
+   Список :ref:`properties <grammar_entity_properties>` для многофайловых предикатов в указанном объекте (свойства включают ``number_of_clauses(Number)``, ``number_of_rules(Number)`` и ``line_count(Line)``, значение ``Line`` будет соответствовать первой фразе многофайлового предиката)
 ``provides(Predicate, Entity, Properties)``
-   Список :ref:`properties <grammar_entity_properties>` для другого многофайлового предиката, который
-   defined in the object (the properties include
-   ``number_of_clauses(Number)``, ``number_of_rules(Number)`` и
-   ``line_count(Line)``, значение ``Line`` будет соответствовать
-   первой фразе многофайлового предиката)
+   Список :ref:`properties <grammar_entity_properties>` для другого многофайлового предиката, который определен в объекте (список свойств включает ``number_of_clauses(Number)``, ``number_of_rules(Number)`` и ``line_count(Line)``, значение ``Line`` будет соответствовать первой фразе многофайлового предиката)
 ``alias(Predicate, Properties)``
-   List of :ref:`properties <grammar_entity_properties>` for a :term:`predicate alias` declared by the object
-   (список свойств включает ``for(Original)``, ``from(Entity)``,
-   ``non_terminal(NonTerminal)`` и ``line_count(Line)``, при этом ``Line``
-   будет равна номеру первой строки директивы ``alias``)
+   Список :ref:`properties <grammar_entity_properties>` для :term:`predicate alias`, определенных в объекте    (список свойств включает ``for(Original)``, ``from(Entity)``, ``non_terminal(NonTerminal)`` и ``line_count(Line)``, при этом ``Line`` будет равна номеру первой строки директивы ``alias``)
 ``calls(Call, Properties)``
-   List of :ref:`properties <grammar_entity_properties>` for predicate calls made by the object (``Call``
-   - это или предикат или управляющая конструкция, такая как
-   ``(::)/1-2`` или ``(^^)/1`` с аргументом-предикатом; при этом
-   значение ``Call`` не может быть основным термом в случае вызова управляющей control
-   структуры, если ее аргумент известен только во время выполнения; свойства
-   включают ``caller(Caller)``, ``alias(Alias)`` и
-   ``line_count(Line)``, при этом и ``Caller`` и ``Alias`` -
-   это предикаты, а ``Line`` - номер строки, где
-   в предикате или директиве выполняется вызов
+   Список :ref:`properties <grammar_entity_properties>` для вызовов предикатов, осуществляемых объектом (``Call`` - это или предикат или управляющая конструкция, такая как ``(::)/1-2`` или ``(^^)/1`` с аргументом-предикатом; при этом значение ``Call`` не может быть основным термом в случае вызова управляющей (control) структуры, если ее аргумент известен только во время выполнения; свойства включают ``caller(Caller)``, ``alias(Alias)`` и ``line_count(Line)``, при этом и ``Caller`` и ``Alias`` - это предикаты, а ``Line`` - номер строки, где в предикате или директиве выполняется вызов
 ``updates(Predicate, Properties)``
-   Список :ref:`properties <grammar_entity_properties>` динамических обновлений предикатов (а также доступ
-   используя предикат ``clause/2``), реализованный объектом (``Predicate``
-   - это или предикат или управляющая конструкция, такая как
-   ``(::)/1-2`` или ``(:)/2`` с предикатом в качестве аргумента; заметим, что
-   значение ``Predicate`` не может быть основным термом в случае управляющей структуры,
-   где аргумент известен время выполнения; свойства включают
-   ``updater(Updater)``, ``alias(Alias)`` и ``line_count(Line)``, где
-   ``Updater`` - это мозможно мультифайловый предикат,
-   ``Alias`` - предикат и ``Line`` -
-   номер первой строки реализации предиката или директивы, обновляющей предикат)
+   Список :ref:`properties <grammar_entity_properties>` динамических обновлений предикатов (а также доступ    используя предикат ``clause/2``), реализованный объектом (``Predicate`` - это или предикат или управляющая конструкция, такая как ``(::)/1-2`` или ``(:)/2`` с предикатом в качестве аргумента; заметим, что значение ``Predicate`` не может быть основным термом в случае управляющей структуры, где аргумент известен время выполнения; свойства включают ``updater(Updater)``, ``alias(Alias)`` и ``line_count(Line)``, где    ``Updater`` - это мозможно мультифайловый предикат, ``Alias`` - предикат и ``Line`` - номер первой строки реализации предиката или директивы, обновляющей предикат)
 ``number_of_clauses(Number)``
-   Total number of predicate clauses defined in the object at compilation
-   time (includes both user-defined clauses and auxiliary clauses generated
-   by the compiler or by the :ref:`expansion hooks <expansion_expansion>`
-   but does not include clauses for multifile predicates defined for other
-   entities or clauses for the object own multifile predicates contributed
-   by other entities)
+   Общее количество правмл предикатов, определенных в объекте во время компиляции (включает как пользовательские утвержения, так и вспомогательные, генерируемые компилятором или :ref:'expansion hooks <expansion_expansion>', но не включает утверждения для многофайловых предикатов, определенных для других объектов или фразы для собственных многофайловых предикатов объекта, внесенных другими субъектами)
+
 ``number_of_rules(Number)``
-   Total number of predicate rules defined in the object at compilation
-   time (includes both user-defined rules and auxiliary rules generated
-   by the compiler or by the :ref:`expansion hooks <expansion_expansion>`
-   but does not include rules for multifile predicates defined for other
-   entities or rules for the object own multifile predicates contributed
-   by other entities)
+   Общее количество правил предикатов, определенных в объекте во время компиляции (включает как определяемые пользователем правила, так и вспомогательные правила, генерируемые компилятором или :ref:`expansion hooks <expansion_expansion>`, но не включает правила для многофайловых предикатов, определенных для других объектов или правила для собственных многофайловых предикатов объекта, внесенных другими объектами)
 ``number_of_user_clauses(Number)``
-   Total number of user-defined predicate clauses defined in the object
-   at compilation time (does not include clauses for multifile predicates
-   defined for other entities or clauses for the object own multifile
-   predicates contributed by other entities)
+   Общее количество определяемых пользователем фраз предиката, определенных в объекте во время компиляции (не включает утверждения для многофайловых предикатов, определенных для других объектов, или утверждения для собственных многофайловых предикатов объекта, внесенных другими субъектами)
 ``number_of_user_rules(Number)``
-   Total number of user-defined predicate rules defined in the object at
-   compilation time (does not include rules for multifile predicates defined
-   for other entities or rules for the object own multifile predicates
-   contributed by other entities)
+   Общее количество правил предикатов, определенных в объекте пользователем и полученных во время компиляции (не включает в себя правила для многофайловых предикатов, определенных для других сущностей, а также правил для собственных многофайловых предикатов объекта, добавленных другими объектами)
 ``debugging``
-   The object is compiled in debug mode
+   Объект компилируется в режиме отладки
 ``module``
-   The object resulted from the compilation of a Prolog module
+   Объект был создан в результате компиляции модуля Prolog
 
 Если предикат вызывается директивой «initialization/1», аргументом свойства «caller/1» будет «:-/1».
 
