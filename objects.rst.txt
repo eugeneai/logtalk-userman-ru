@@ -1,5 +1,5 @@
 ..
-   Этот файл является частью проекта Logtalk <https://logtalk.org/>  
+   Этот файл является частью проекта Logtalk <https://logtalk.org/>
    Copyright 1998-2022 Paulo Moura <pmoura@logtalk.org>
    Идентификатор лицензии SPDX: Apache-2.0
 
@@ -32,93 +32,54 @@ Logtalk, defines two built-in objects, :ref:`user <apis:user/0>` and
 :ref:`logtalk <apis:logtalk/0>`, which are described at the end of this
 section.
 
+Основной целью создания объектов в Logtalk является инкапсуляция и повторное использование предикатов. Вместо единой базы данных, содержащей весь код, объекты Logtalk предоставляют отдельные пространства имен или базы данных, позволяющие разделять код на части, которыми проще манипулировать. Logtalk является декларативным языком программирования и не стремится привнести какую-то новую концепцию динамического изменения состояния в парадигму логического программирования, в частности, язык Пролог.
+
+Logtalk определяет два встроенных объекта :ref:`user <apis:user/0>` и :ref:`logtalk <apis:logtalk/0>`, которые описаны в конце этого раздела.
+
+
 .. _objects_roles:
 
-Objects, prototypes, classes, and instances
+Объекты, прототипы, классы и экземпляры
 -------------------------------------------
 
-There are only three kinds of encapsulation entities in Logtalk:
-*objects*, *protocols*, and *categories*. Logtalk uses the term *object*
-in a broad sense. The terms *prototype*, *parent*, *class*, *subclass*,
-*superclass*, *metaclass*, and *instance* always designate an object.
-Different names are used to emphasize the *role* played by an object in
-a particular context. I.e. we use a term other than object when we want
-to make the relationship with other objects explicit. For example, an
-object with an *instantiation* relation with other object plays the role
-of an *instance*, while the instantiated object plays the role of a
-*class*; an object with a *specialization* relation with other object
-plays the role of a *subclass*, while the specialized object plays the
-role of a *superclass*; an object with an *extension* relation with
-other object plays the role of a *prototype*, the same for the extended
-object. A *stand-alone* object, i.e. an object with no relations with
-other objects, is always interpreted as a prototype. In Logtalk, entity
-relations essentially define *patterns* of code reuse. An entity is
-compiled accordingly to the roles it plays.
+В Logtalk есть только три типа объектов инкапсуляции: *объекты*, *протоколы* и *категории*. Logtalk использует термин «объект» в широком смысле. Термины «прототип», «родитель», «класс», «подкласс», «суперкласс», «метакласс» и «инстанция» всегда обозначают объект.
 
-Logtalk allows you to work from standalone objects to any kind of
-hierarchy, either class-based or prototype-based. You may use single or
-multiple inheritance, use or forgo metaclasses, implement reflective
-designs, use parametric objects, and take advantage of protocols and
-categories (think components).
+Различные названия используются, чтобы подчеркнуть *роль*, которую играет объект в определенном контексте. То есть, мы используем термин, отличный от "объект" (object), когда мы хотим сделать отношения с другими объектами явными. Например, объект, включающий отношение *создание экземпляра* с другим объектом играет роль *экземпляра*, в то время как объект, из которого порождаются экземпляры, играет роль *класса*; объект, включающий отношение *специализация* с другим объектом играет роль *подкласса*, в то время как *объект-специализация* играет роль *суперкласса*; объект, включающий отношение *расширение* с другим объектом играет роль *прототипа*, аналогично специализации объекта. Объект, не имеющий отношения с другими объектами, всегда интерпретируется как *прототип*.  В Logtalk отношения сущностей по существу определяют *паттерны* (шаблонные решения) повторного использования кода.  Программный элемент компилируется в соответствии с ролями, которые он играет в программе.
+
+Logtalk allows you to work from standalone objects to any kind of hierarchy, either >>=based or >>=based. You may use single or multiple inheritance, use or forgo metaclasses, implement reflective designs, use parametric objects, and take advantage of protocols and categories (think components).
+
+Logtalk позволяет создавать разнообразные иерархии объектов, начиная с автономных, либо на основе иерархии *прототипов*, либо на основе иерархии *классов*.  Вы можете использовать одиночное или множественное наследование, использовать метаклассы или отказаться от них вообще, реализовывать конструкции-отражения, использовать параметрические объекты, протоколы и категории (компоненты, реализующие некоторый шаблонный способ решения задачи).
 
 .. _objects_prototypes:
 
-Prototypes
-~~~~~~~~~~
+Прототипы
+~~~~~~~~~
 
-Prototypes are either self-defined objects or objects defined as
-extensions to other prototypes with whom they share common properties.
-Prototypes are ideal for representing one-of-a-kind objects. Prototypes
-usually represent concrete objects in the application domain. When
-linking prototypes using *extension* relations, Logtalk uses the term
-*prototype hierarchies* although most authors prefer to use the term
-*hierarchy* only with class generalization/specialization relations. In
-the context of logic programming, prototypes are often the ideal
-replacement for modules.
+Прототипы представляют собой либо объекты-определения сами-по-себе, либо объекты, задаваемые как расширения других прототипов, с которыми они имеют общие свойства. Прототипы идеально подходят для представления уникальных объектов. Они обычно представляют конкретные объекты в предметной области.  При связывании прототипов с использованием отношений *расширения* в Logtalk используется термин *иерархии прототипов*, хотя большинство авторов предпочитают использовать термин *иерархия* только с отношениями обобщения/специализации классов. В контексте логического программирования прототипы часто являются идеальной заменой модулям.
 
 .. _objects_classes:
 
-Classes
-~~~~~~~
+Классы
+~~~~~~
 
-Classes are used to represent abstractions of common properties of sets
-of objects. Classes often provide an ideal structuring solution when you
-want to express hierarchies of abstractions or work with many similar
-objects. Classes are used indirectly through *instantiation*. Contrary
-to most object-oriented programming languages, instances can be created
-both dynamically at runtime or defined in a source file like other
-objects. Using classes in requires defining at least one :term:`metaclass`,
-as explained below.
+Classes are used to represent abstractions of common properties of sets of objects. Classes often provide an ideal structuring solution when you want to express hierarchies of abstractions or work with many similar objects. Classes are used indirectly through *instantiation*. Contrary to most object-oriented programming languages, instances can be created both dynamically at runtime or defined in a source file like other objects. Using classes in requires defining at least one :term:`metaclass`, as explained below.
+
+Классы используются для представления абстракций общих свойств множества объектов. Классы часто обеспечивают идеальное решение для структурирования, когда вы хотите выразить иерархию абстракций или работать со многими схожими объектами. Классы не используются непосредственно, при помощи них надо *создавать экземпляры*. В отличие от большинства объектно-ориентированных языков программирования, экземпляры могут быть созданы как динамически во время выполнения, так и определены в исходном файле, как и другие виды объектов. Использование классов требует определения по крайней мере одного :term:`metaclass`, как описано ниже.
 
 .. _objects_defining:
 
-Defining a new object
----------------------
+Определение нового объекта
+--------------------------
 
-We can define a new object in the same way we write Prolog code: by
-using a text editor. Исходные файлы Logtalk могут содержать один или несколько
-объектов, категори1 и протоколов. If you prefer to define each entity
-in its own source file, it is recommended that the file be named after
-the object. По умолчанию все исходные файлы Logtalk используют расширение
-``.lgt``, однако, это можно поменять в файлах-адаптерах конкретных систем Prolog-программирования.
-Промежуточные исходные файлы Prolog, генерируемые компилятором Logtalk,
-по умолчанию имеют суффикс ``_lgt`` и расширение ``.pl``. Опять же, это можно настроить в соответствии с потребностями конкретного компилятора Prolog в соответствующем файле-адаптере. For instance, we may define an object named
-``vehicle`` and save it in a ``vehicle.lgt`` source file which will be
-compiled to a ``vehicle_lgt.pl`` Prolog file (depending on the
-:term:`backend compiler <backend Prolog compiler>`, the names of the
-intermediate Prolog files may include a directory hash and a process
-identifier to prevent file name clashes when embedding Logtalk
-applications or running parallel Logtalk processes).
+Мы можем определить новый объект так же, как мы пишем код Prolog - с помощью текстового редактора. Исходные файлы Logtalk могут включать в себя один или несколько объектов, катирий и протоколов.  Если вы предпочитаете определять каждую сущность в собственном исходном файле, рекомендуется, чтобы файл был назван именем задаваемого объекта. По умолчанию все исходные файлы Logtalk используют расширение ``.lgt``, однако, это можно поменять в файлах-адаптерах конкретных систем Prolog-программирования.  Промежуточные исходные файлы Prolog, генерируемые компилятором Logtalk, по умолчанию имеют суффикс ``_lgt`` и расширение ``.pl``. Опять же, это можно настроить в соответствии с потребностями конкретного компилятора Prolog в соответствующем файле-адаптере. Например, мы можем определить объект под названием «vehicle» и сохранить его в исходном файле «vehicle.lgt», который будет скомпилирован в файл «vehicle_lgt.pl».  Файл Prolog (в зависимости от :term:`backend compiler <backend Prolog compiler>`), имена промежуточных файлов Prolog могут включать в себя знак "хэш" имени каталога и идентификатор процесса для предотвращения коллизии имен файлов при встраивании приложений Logtalk или при запуске параллельных процессов Logtalk.
 
-Object names can be atoms or compound terms (when defining parametric
-objects, see below). Objects, categories, and protocols share the same
-name space: we cannot have an object with the same name as a protocol or
-a category.
+Object names can be atoms or compound terms (when defining parametric objects, see below). Objects, categories, and protocols share the same name space: we cannot have an object with the same name as a protocol or a category.
 
-Object code (directives and predicates) is textually encapsulated by
-using two Logtalk directives: :ref:`directives_object_1_5` and
-:ref:`directives_end_object_0`. The most simple object will be one
-that is self-contained, not depending on any other Logtalk entity:
+Object code (directives and predicates) is textually encapsulated by using two Logtalk directives: :ref:`directives_object_1_5` and :ref:`directives_end_object_0`. The most simple object will be one that is self-contained, not depending on any other Logtalk entity:
+
+Названиями объектов могут выступать и атомы и составные термы. В последнем случае определяется так называемый параметризованный объект.  Объекты, категории и протоколы разделяют общее пространство имен: нельзя задать объект с таким же названием, как протокол или категория.
+
+Объектный код (директивы и предикаты) инкапсулируется в тексте с помощью двух директив Logtalk: :ref:'directives_object_1_5' и :ref:'directives_end_object_0'. Наиболее простым объектом будет тот, который является автономным, не зависящим от какой-либо другой сущности Logtalk:
 
 ::
 
@@ -126,8 +87,7 @@ that is self-contained, not depending on any other Logtalk entity:
        ...
    :- end_object.
 
-If an object implements one or more protocols then the opening directive
-will be:
+Если объект реализует один или несколько протоколов, то директива создания объекта будет:
 
 ::
 
@@ -136,7 +96,7 @@ will be:
        ...
    :- end_object.
 
-An object can import one or more categories:
+Объект может импортировать одну или несколько категорий:
 
 ::
 
@@ -145,8 +105,7 @@ An object can import one or more categories:
        ...
    :- end_object.
 
-If an object both implements protocols and imports categories then we
-will write:
+Если объект реализует протоколы и импортирует категории то он будет похож на этот:
 
 ::
 
@@ -156,9 +115,9 @@ will write:
        ...
    :- end_object.
 
-In object-oriented programming objects are usually organized in
-hierarchies that enable interface and code sharing by inheritance. In
-Logtalk, we can construct prototype-based hierarchies by writing:
+In object-oriented programming objects are usually organized in hierarchies that enable interface and code sharing by inheritance. In Logtalk, we can construct prototype-based hierarchies by writing:
+
+использовать интерфейс и код через наследование. В Logtalk мы можем построить иерархии на основе прототипов, написав:
 
 ::
 
@@ -167,9 +126,9 @@ Logtalk, we can construct prototype-based hierarchies by writing:
        ...
    :- end_object.
 
-We can also have class-based hierarchies by defining instantiation and
-specialization relations between objects. To define an object as a class
-instance we will write:
+We can also have class-based hierarchies by defining instantiation and specialization relations between objects. To define an object as a class instance we will write:
+
+Мы также можем создавать иерархии классов, определяя отношения специализации и создания экземпляра между объектами. Чтобы определить объект как экземпляр класса, создадим код, поддобный этому:
 
 ::
 
@@ -178,7 +137,7 @@ instance we will write:
        ...
    :- end_object.
 
-A class may specialize another class, its superclass:
+Класс может специализировать другой класс, последний будет его суперклассом:
 
 ::
 
@@ -187,8 +146,7 @@ A class may specialize another class, its superclass:
        ...
    :- end_object.
 
-If we are defining a reflexive system where every class is also an
-instance, we will probably be using the following pattern:
+Если мы определяем рефлексивную систему, где каждый класс также является экземпляром, будем использовать схему, подобную следующей:
 
 ::
 
@@ -198,31 +156,23 @@ instance, we will probably be using the following pattern:
        ...
    :- end_object.
 
-In short, an object can be a *stand-alone* object or be part of an
-object hierarchy. The hierarchy can be prototype-based (defined by
-extending other objects) or class-based (with instantiation and
-specialization relations). An object may also implement one or more
-protocols or import one or more categories.
+Одним словом, объект может быть объектом самим-по-себе или быть частью иерархии объектов. Иерархия может быть основана на прототипах (определяется путем расширения (extending) других объектов) или классов (с отношениями создания экземпляра и специализации). Объект может также реализовать один или несколько протоколов и/или импортировать одну или несколько категорий.
 
-A *stand-alone* object (i.e. an object with no extension, instantiation,
-or specialization relations with other objects) always plays the role of
-a prototype, that is, a self-describing object. If we want to use classes
-and instances, then we will need to specify at least one instantiation
-or specialization relation. The best way to do this is to define a set
-of objects that provide the basis of a reflective system [Cointe87]_,
-[Moura94]_. Например:
+*Сам-по-себе* объект, т.е. объект не вступающий в другие отношения, в том числе, создания экземпляра, специализации отношений с другими объектами, всегда играет роль прототипа, то есть он сам-себя-задающий объект. Если мы хотим использовать классы и экземпляры, то нам нужно будет указать хотя бы одно отношение создания экземпляря или специализации. Лучший способ сделать это — определить набор объектов, которые задают систему рефлексии [Cointe87]_, [Moura94]_. Например:
 
 ::
 
-   % avoid the inevitable unknown entity warnings as in a
-   % reflective system there will always be references to
-   % an entity that will be defined after the reference
+   % настройка, позволяющая отключить неизбежные
+   % предупреждения об использовании в определении
+   % неизвестного объекта, поскольку в рефлексивной системе
+   % всегда будут ссылки на объект, который будет
+   % задан уже после этой ссылки
 
    :- set_logtalk_flag(unknown_entities, silent).
 
 
-   % default root of the inheritance graph
-   % providing predicates common to all objects
+   % корень иерархии наследования задающий
+   % предикаты, известные всем объектам
 
    :- object(object,
        instantiates(class)).
@@ -230,8 +180,8 @@ of objects that provide the basis of a reflective system [Cointe87]_,
    :- end_object.
 
 
-   % default metaclass for all classes providing
-   % прдикаты, доступые всем классам, имеющим экземпляры
+   % метакласс по умолчанию, задающий предикаты,
+   % доступые всем классам, имеющим экземпляры
 
    :- object(class,
        instantiates(class),
@@ -240,8 +190,8 @@ of objects that provide the basis of a reflective system [Cointe87]_,
    :- end_object.
 
 
-   % default metaclass for all abstract classes
-   % providing predicates common to all classes
+   % метакласс по умолчанию для всех абстактных классов,
+   % определяет предикаты, общие для всех классов
 
    :- object(abstract_class,
        instantiates(class),
@@ -249,15 +199,12 @@ of objects that provide the basis of a reflective system [Cointe87]_,
        ...
    :- end_object.
 
-Note that with these instantiation and specialization relations,
-``object``, ``class``, and ``abstract_class`` are, at the same time,
-classes and instances of some class. In addition, each object inherits
-its own predicates and the predicates of the other two objects without
-any inheritance loop.
 
-When a full-blown reflective system solution is not needed, the above
-scheme can be simplified by making an object an instance of itself, i.e.
-by making a class its own metaclass. Например:
+Обратите внимание, что при помощи этих отношений создания экземпляра и специализации «object», «class» и «abstract_class» являются одновременно классами и экземплярами какого-либо класса. Кроме того, каждый объект наследует свои собственные предикаты и предикаты двух других объектов без какой-либо петлевого наследования.
+
+When a full-blown reflective system solution is not needed, the above scheme can be simplified by making an object an instance of itself, i.e.  by making a class its own metaclass. Например:
+
+Когда не требуется создавать полномасштабный авриант рефлективной системы, показанная выше схема упрощается: надо сделать некоторый объект экземпляром самого себя, и, конкретно, сделать класс своим собственным метаклассом. Пример:
 
 ::
 
@@ -266,32 +213,21 @@ by making a class its own metaclass. Например:
        ...
    :- end_object.
 
-We can use, in the same application, both prototype and class-based
-hierarchies (and freely exchange messages between all objects). We
-cannot however mix the two types of hierarchies by, e.g., specializing
-an object that extends another object in this current Logtalk version.
+We can use, in the same application, both prototype and class-based hierarchies (and freely exchange messages between all objects). We cannot however mix the two types of hierarchies by, e.g., specializing an object that extends another object in this current Logtalk version.
 
-Logtalk also supports public, protected, and private inheritance. See
-the :ref:`inheritance <inheritance_scope>` section for details.
+Допускается использование в одном приложении как иерархии прототипов, так и иерархии классо, при этом все объекты могут свободно обмениваться сообщениями друг с другом.  В настоящее время не разрешается смешивать два типа иерархий, например, специализируя объект, который расширяет другой объект Logtalk.
+
+
+Logtalk также поддерживает публичное (public), защищенное (protected) и приватное (private) наследование. Смотрите  раздел :ref:`inheritance <inheritance_scope>` для детального изучения данного предмета.
 
 .. _objects_parametric:
 
-Parametric objects
-------------------
+Параметрические объекты
+-----------------------
 
-Parametric objects have a compound term as identifier where all the
-arguments of the compound term are variables. These variables, the
-*object parameters*, can be instantiated when sending or as a consequence
-of sending a message to the object, thus acting as object parameters. The
-object predicates can then be coded to depend on those parameters, which
-are logical variables shared by all object predicates. When an object state
-is set at object creation and never changed, parameters provide a better
-solution than using the object's database via asserts. Parametric objects
-can also be used to associate a set of predicates to terms that share a
-common functor and arity.
+Параметрические объекты обозначаются *составным термом* в качестве идентификатора, все аргументы такого терма обязательно являются переменными.  Эти переменные - это *параметры объекта*, они получают конкретные значения в следствие отправки и приема сообщений объекту.  Реализация тела предикатов объекта, в общем случае, использует эти параметры.  Общая логика использования параметров - это передача одного значения группе предикатов, использующих эти переменные в своем определении.  Если состояние объекта устанавливается только при создании объекта и никогда не изменяется, то это лучшее решение, чем использование базы данных объекта, изменяемой предикатами assert/retract. Параметрические объекты также могут быть использованы для создания ассоциаций набора предикатов с термами, которые имеют общий функтор и арность.
 
-In order to give access to an object parameter, Logtalk provides a
-:ref:`methods_parameter_2` built-in local method:
+Чтобы получить доступ к каому-либо параметру объекта, Logtalk предоставляет встроенный локальный метод :ref: 'methods_parameter_2':
 
 ::
 
@@ -306,8 +242,7 @@ In order to give access to an object parameter, Logtalk provides a
            baz(Baz),
            ... .
 
-An alternative solution is to use the built-in local method
-:ref:`methods_this_1`. Например:
+Другим способом является использование встроенного локального метода :ref:'methods_this_1':
 
 ::
 
@@ -319,19 +254,12 @@ An alternative solution is to use the built-in local method
            baz(Baz),
            ... .
 
-Both solutions are equally efficient as calls to the methods ``this/1``
-and ``parameter/2`` are usually compiled inline into a clause head
-unification. The drawback of this second solution is that we must check
-all calls of ``this/1`` if we change the object name. Note that we can't
-use these method with the message sending operators
-(:ref:`control_send_to_object_2`, :ref:`control_send_to_self_1`, or
-:ref:`control_call_super_1`).
+Оба варианта одинаково эффективны, поскольку вызовы методов «this/1» и «parameter/2» обычно компилируются в виде унификации с заголовком.  Недостатком второго решения является то, что вынуждены проверять все вызовы «this/1», если изменим струткуру названия объекта. Обратите внимание, что мы не можем использовать этот метод с операторами отправки сообщений (ref: 'control_send_to_object_2', :ref:'control_send_to_self_1' или :ref:'control_call_super_1').
 
-A third alternative to access object parameters is to use
-:term:`parameter variables <parameter variable>`. Although parameter variables
-introduce a concept of entity global variables, their unique syntax,
-``_ParameterName_``, avoids conflicts and makes them easily recognizable. For
-example:
+
+Третий вариант доступа к параметрам объекта — использование переменных-параметров :term:`parameter variables <parameter variable>`.  Несмотря на то, что переменные-параметры вводят понятие глобальных переменных сущности, их уникальный синтаксис «_ParameterName_» позволяет избежать конфликтов и делает их легко узнаваемыми. Например:
+
+A third alternative to access object parameters is to use :term:`parameter variables <parameter variable>`. Although parameter variables introduce a concept of entity global variables, their unique syntax, ``_ParameterName_``, avoids conflicts and makes them easily recognizable. For example:
 
 ::
 
@@ -344,44 +272,26 @@ example:
            baz(_Baz_),
            ... .
 
-Note that using parameter variables doesn't change the fact that entity parameters
-are logical variables. Parameter variables simplify code maintenance by allowing
-parameters to be added, reordered, or removed without having to specify or update
-parameter indexes.
+Обратите внимание, что использование переменных-параметров не меняет того факта, что параметры объекта являются логическими переменными. Параметрические переменные упрощают обслуживание кода, позволяя добавлять, переупорядочивать или удалять параметры без необходимости указывать или обновлять индексы параметров.
 
-When storing a parametric object in its own source file, the convention
-is to name the file after the object, with the object arity appended.
-For instance, when defining an object named ``sort(Type)``, we may save
-it in a ``sort_1.lgt`` text file. This way it is easy to avoid file name
-clashes when saving Logtalk entities that have the same functor but
-different arity.
+Если задавать параметрический объект в собственном исходном файле, то по соглашению название файла будет состоять из назавния объекта и его арности. Например, при определении объекта под названием ''sort(_Type_)'', сохраним его код в текстовом файле ''sort_1.lgt''. Теперь легко избежать наложений имен файлов при определении объектов Logtalk, которые имеют один и тот же функтор, но разные арности.
 
-Compound terms with the same functor and with the same number of
-arguments as a parametric object identifier may act as *proxies* to a
-parametric object. Proxies may be stored on the database as Prolog facts
-and be used to represent different instantiations of a parametric object
-identifier. Logtalk provides a convenient notation for accessing proxies
-represented as Prolog facts when sending a message:
+Сложные термины с одним и тем же функтором и с тем же количеством аргументов, что и параметрический идентификатор объекта, могут действовать как *прокси* (заместители) к другому параметрическому объекту. Прокси могут храниться в базе данных в виде фактов Пролога и использоваться для представления различных конкретизаций идентификатора параметрического объекта. Logtalk предоставляет удобную нотацию для доступа к прокси-объектам, представленных как факты Prolog-а. Эта нотация используется при отправке сообщения следующего вида:
 
 ::
 
    ..., {Proxy}::Message, ...
 
-In this context, the proxy argument is proved as a plain Prolog goal. If
-successful, the message is sent to the corresponding parametric object.
-Typically, the proof allows retrieving of parameter instantiations. This
-construct can either be used with a proxy argument that is sufficiently
-instantiated in order to unify with a single Prolog fact or with a proxy
-argument that unifies with several facts on backtracking.
+В этом контексте (примере) аргумент "Proxy" доказывается как обычная цель Prolog-а. В случае успеха, отправляется сообщение соответствующему параметрическому объекту. Как правило, доказательство позволяет получить конкретные значения для параметров.  Эта конструкция может быть использована либо с прокси-аргументом, который достаточно конкретизирован, чтобы унифицироваться с какм-либо фактом Пролога, либо с прокси-аргументом, который унифицируется с несколькими фактами в процессе бэктрекинга.
 
 .. _objects_finding:
 
-Finding defined objects
------------------------
+Перечисление заданных в программе и порожденных объектов
+--------------------------------------------------------
 
-We can find, by backtracking, all defined objects by calling the
-:ref:`predicates_current_object_1` built-in predicate with a
-unbound argument:
+We can find, by backtracking, all defined objects by calling the :ref:`predicates_current_object_1` built-in predicate with a unbound argument:
+
+Перечисление объектов, известных в прграмме, реализуется при помощи бэктрекинга встроенного предиката :ref:'predicates_current_object_1', причем его аргмент должен быть несвязанным (var):
 
 .. code-block:: text
 
@@ -390,26 +300,23 @@ unbound argument:
    Object = user ;
    ...
 
-This predicate can also be used to test if an object is defined by
-calling it with a valid object identifier (an atom or a compound term).
+
+Этот предикат также используется для проверки того, задан ли объект.  Для эого предикат "current_object" вызывается с конкретизированным идентификатором объекта, а он либо атом, либо сложный терм.
 
 .. _objects_creating:
 
-Creating a new object in runtime
---------------------------------
+Создание объекта во время выполнения
+-------------------------------------------
 
-An object can be dynamically created at runtime by using the
-:ref:`predicates_create_object_4` built-in predicate:
+Объект можно создавать и динамически во время выполнения программы с помощью встроенного предиката :ref:'predicates_create_object_4':
+
+Объект может быть динамически создан во время выполнения с помощью встроенного предиката :ref:'predicates_create_object_4':
 
 .. code-block:: text
 
    | ?- create_object(Object, Relations, Directives, Clauses).
 
-The first argument should be either a variable or the name of the new
-object (a Prolog atom or compound term, which must not match any
-existing entity name). The remaining three arguments correspond to the
-relations described in the opening object directive and to the object
-code contents (directives and clauses).
+Первым аргументом должна быть либо переменная, либо название нового объекта (атом Пролога или составной терм, который не должен совпадать с точностью до унификации с каком-либо существующим идентификатором объекта). Остальные три аргумента соответствуют отношениям, используемым в структуре задания объекта, а также определениям кода объекта (различные директивы и фразы).
 
 Например, вызов:
 
@@ -422,7 +329,7 @@ code contents (directives and clauses).
             [foo(1), foo(2)]
         ).
 
-is equivalent to compiling and loading the object:
+эквивалентен компиляции и загрузке объекта:
 
 ::
 
@@ -437,51 +344,40 @@ is equivalent to compiling and loading the object:
 
    :- end_object.
 
-If we need to create a lot of (dynamic) objects at runtime, then is best
-to define a metaclass or a prototype with a predicate that will call
-this built-in predicate to make new objects. This predicate may provide
-automatic object name generation, name checking, and accept object
-initialization options.
+Если нужно создать много динамических объектов во время выполнения, то лучше всего определить метакласс или прототип с предикатом, который будет вызывать "create_object/4" для создания новых объектов. Этот новый предикат в том числе модет автоматически генерировать идентификаторы объекта, проверку имен и принимать параметры, инициализирующие новые объекты.
 
 .. _objects_abolishing:
 
-Abolishing an existing object
------------------------------
+Уничтожение существующего объекта
+---------------------------------
 
-Dynamic objects can be abolished using the :ref:`predicates_abolish_object_1`
-built-in predicate:
+Динамические объекты могут быть удалены с помощью встроенного предиката :ref:'predicates_abolish_object_1':
 
 .. code-block:: text
 
    | ?- abolish_object(Object).
 
-The argument must be an identifier of a defined dynamic object,
-otherwise an error will be thrown.
+Аргумент должен быть идентификатором определенного динамического объекта, иначе будет создано исключение.
 
 .. _objects_directives:
 
-Object directives
------------------
+Директивы по объектам
+---------------------
 
-Object directives are used to set initialization goals, define object
-properties, to document an object dependencies on other Logtalk
-entities, and to load the contents of files into an object.
+Директивы объекта используются для задания целевого предиката для инициализации объекта, определения специфических свойств объекта, документирования зависимостей объекта от других объектов Logtalk и загрузки содержимого файлов в объект.
 
 .. _objects_initialization:
 
-Object initialization
+Инициализация объекта
 ~~~~~~~~~~~~~~~~~~~~~
 
-We can define a goal to be executed as soon as an object is (compiled
-and) loaded to memory with the :ref:`directives_initialization_1`
-directive:
+Инициализация объекта - это цель, которая должна быть выполнена, как только объект скопилирован и загружен в память директивой :ref:'directives_initialization_1':
 
 ::
 
    :- initialization(Goal).
 
-The argument can be any valid Logtalk goal. For example, a call to a
-local predicate:
+Аргументом может быть любая действительная цель Logtalk. Например, вызов какого-либо инкапсулированного в объект предиката:
 
 ::
 
@@ -497,7 +393,7 @@ local predicate:
 
    :- end_object.
 
-Or a message to another object:
+Или сообщение другому объекту:
 
 ::
 
@@ -508,9 +404,9 @@ Or a message to another object:
 
    :- end_object.
 
-Another common initialization goal is a message to *self* in order to call
-an inherited or imported predicate. For example, assuming that we have a
-``monitor`` category defining a ``reset/0`` predicate, we could write:
+Another common initialization goal is a message to *self* in order to call an inherited or imported predicate. For example, assuming that we have a ``monitor`` category defining a ``reset/0`` predicate, we could write:
+
+Другой распространенной вариантом инициализации является сообщение самому себе, чтобы вызвать унаследованный или импортированный предикат. Например, предположив, что у нас есть категория «monitor», определяющая предикат «reset/0», мы могли бы написать:
 
 ::
 
@@ -522,50 +418,37 @@ an inherited or imported predicate. For example, assuming that we have a
 
    :- end_object.
 
-Note, however, that descendant objects do not inherit initialization
-directives. In this context, *self* denotes the object that contains the
-directive. Also note that object initialization does not necessarily mean
-setting an object dynamic state.
+Обратите внимание, что объекты-потомки не наследуют директивы инициализации. В этом контексте *self* обозначает объект, содержащий эту самую директиву. Также обратите внимание, что инициализация объекта не обязательно означает установление некоторого динамического состояния объекта.
 
 .. _objects_dynamic:
 
-Dynamic objects
-~~~~~~~~~~~~~~~
+Динамические объекты
+~~~~~~~~~~~~~~~~~~~~
 
-Similar to Prolog predicates, an object can be either static or dynamic.
-An object created during the execution of a program is always dynamic.
-An object defined in a file can be either dynamic or static. Dynamic
-objects are declared by using the :ref:`directives_dynamic_0` directive in the
-object source code:
+Similar to Prolog predicates, an object can be either static or dynamic.  An object created during the execution of a program is always dynamic.  An object defined in a file can be either dynamic or static. Dynamic objects are declared by using the :ref:`directives_dynamic_0` directive in the object source code:
+
+Подобно предикатам Пролога, объект может быть либо статическим, либо динамическим. Объект, созданный во время выполнения программы, будет всегда динамическим. Объект, определенный в тексте файла, может быть и динамическим, и статическим. Динамические объекты объявляются с помощью директивы :ref:'directives_dynamic_0' в исходном коде определения объекта:
 
 ::
 
    :- dynamic.
 
-Директива должна предшествовать любым директивам спецификации предикатов и их реализациям. Имейте в виду, что использование динамического кода приводит к снижению производительности по сравнению со его статическим вариантом. We should only use dynamic objects when these
-need to be abolished during program execution. In addition, note that we
-can declare and define dynamic predicates within a static object.
+Директива должна предшествовать любым директивам спецификации предикатов и их реализациям. Имейте в виду, что использование динамического кода приводит к снижению производительности по сравнению со его статическим вариантом.  Использование динамических объекты рекомендовано только тогда, когда они должны на каком-то этапе исполнения программы удалены из оперативной памяти. Кроме того, внимание, мы можем объявить и задавать динамические предикаты внутри статического объекта!
 
 .. _objects_documentation:
 
-Object documentation
-~~~~~~~~~~~~~~~~~~~~
+Документирование объекта
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-An object can be documented with arbitrary user-defined information
-by using the :ref:`directives_info_1` entity directive. Смотрите раздел
-:ref:`documenting_documenting` для получения подробной информации.
+Хорошим тоном в программировании является документирование объекта с помощью дополнительной информации, задаваемой программистом, с помощью :ref:'directives_info_1'.  Смотрите раздел :ref:`documenting_documenting` для получения подробной информации.
 
 .. _objects_include:
 
-Loading files into an object
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Загрузка файлов в объект
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-The :ref:`directives_include_1` directive
-can be used to load the contents of a file into an object. A typical usage
-scenario is to load a plain Prolog file into an object thus providing a
-simple way to encapsulate its contents. For example, assume a ``cities.pl``
-file defining facts for a ``city/4`` predicate. We could define a wrapper
-for this database by writing:
+
+Директива :ref:'directives_include_1' используется для загрузки содержимого файла в объект. Типичным сценарием использования является загрузка обычного файла Prolog в объект Logtalk, обеспечивая простой способ инкапсуляции его содержимого.  Например, предположим, что файл «cities.pl» определяет факты для предиката «city/4». Определим "обертку" для этой базы данных, написав:
 
 ::
 
@@ -577,8 +460,7 @@ for this database by writing:
 
    :- end_object.
 
-The ``include/1`` directive can also be used when creating an object
-dynamically. Например:
+Директива "include/1" используется и в процессе создания объекта динамически. Например:
 
 .. code-block:: text
 
@@ -589,154 +471,133 @@ dynamically. Например:
 Задание псевдонимов объектам
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Директива :ref:`directives_uses_1` позволяет задавать псевдонимы объектам.
-The typical uses of this directive include shortening long object names,
-working consistently with specific parameterizations of parametric objects,
-and simplifying experimenting with different object implementations of the
-same protocol when using explicit message sending.
+Директива :ref:`directives_uses_1` позволяет задавать псевдонимы объектам. Типичное использование этой директивы включает сокращение длинных имен объектов, согласованную работу с конкретными специализациями параметрических объектов и упрощение тестирования различных реализаций объектов одного и того же протокола при использовании явной отправки сообщений.
 
 .. _objects_relationships:
 
-Object relationships
---------------------
+Отношения между объектами
+-------------------------
 
-Logtalk provides six sets of built-in predicates that enable us to query
-the system about the possible relationships that an object may have with
-other entities.
+Logtalk предоставляет шесть наборов встроенных предикатов, которые позволяют запрашивать систему о существовании различных отношений между объектами.
 
-The :ref:`predicates_instantiates_class_2_3` built-in predicates can be
-used to query all instantiation relations:
+Встроенный предикат :ref:`predicates_instantiates_class_2_3` используется для запроса всех отношений между экземплярами и их классами:
 
 .. code-block:: text
 
    | ?- instantiates_class(Instance, Class).
 
-or, if we also want to know the instantiation scope:
+или, если хотим знать пространство имен, где созданы экземпляры:
 
 .. code-block:: text
 
    | ?- instantiates_class(Instance, Class, Scope).
 
-Specialization relations can be found by using the
-:ref:`predicates_specializes_class_2_3` built-in predicates:
+Отношения специализации можно найти, используя встроенные предикаты :ref:'predicates_specializes_class_2_3':
 
 .. code-block:: text
 
    | ?- specializes_class(Class, Superclass).
 
-or, if we also want to know the specialization scope:
+или, если мы также хотим знать пространство имен, где реализована специализация:
 
 .. code-block:: text
 
    | ?- specializes_class(Class, Superclass, Scope).
 
-For prototypes, we can query extension relations using with the
-:ref:`predicates_extends_object_2_3` built-in predicates:
+Для прототипов мы можем запрашивать отношения расширения с помощью встроенных предикатов :ref:'predicates_extends_object_2_3':
 
 .. code-block:: text
 
    | ?- extends_object(Object, Parent).
 
-или, если нужно также пространство имен:
+или, если нужно также и пространство имен:
 
 .. code-block:: text
 
    | ?- extends_object(Object, Parent, Scope).
 
-In order to find which objects import which categories we can use the
-:ref:`predicates_imports_category_2_3` built-in predicates:
+Для того, чтобы найти, какие объекты импортируют какие категории, используется встроенные предикаты :ref:'predicates_imports_category_2_3':
 
 .. code-block:: text
 
    | ?- imports_category(Object, Category).
 
-или, если надо узнать ограничения для пространства имен во время импорта:
+или, если надо узнать пространство имен во время импорта:
 
 .. code-block:: text
 
    | ?- imports_category(Object, Category, Scope).
 
-To find which objects implements which protocols we can use the
-:ref:`predicates_implements_protocol_2_3` and
-:ref:`predicates_conforms_to_protocol_2_3` built-in predicates:
+Чтобы найти, какие объекты реализуют и какие протоколы, используем встроенные предикаты :ref:'predicates_implements_protocol_2_3' и :ref:'predicates_conforms_to_protocol_2_3':
 
 .. code-block:: text
 
    | ?- implements_protocol(Object, Protocol, Scope).
 
-или, если надо посмотреть унаследованные протоколы:
+или, если надо посмотреть унаследованные протоколы вместе с пространствои имен:
 
 .. code-block:: text
 
    | ?- conforms_to_protocol(Object, Protocol, Scope).
 
-Note that, if we use a unbound first argument, we will need to use the
-:ref:`predicates_current_object_1` built-in predicate to ensure that the
-entity returned is an object and not a category.
 
-To find which objects are explicitly complemented by categories we can
-use the :ref:`predicates_complements_object_2` built-in predicate:
+Обратите внимание, если использовать свободный первый аргумент, нам нужно будет использовать встроенный предикат :ref:'predicates_current_object_1', чтобы гарантировать, что возвращаемая сущность является объектом, а не категорией.
+
+Чтобы определить, какие объекты явно дополняются (complements) категориями, используем встроенный предикат :ref:'predicates_complements_object_2':
 
 .. code-block:: text
 
    | ?- complements_object(Category, Object).
 
-Note that more than one category may explicitly complement a single
-object and a single category can complement several objects.
+Обратите внимание, что несколько категорий может дополнять один объект, а также одна категория может дополнять несколько объектов.
 
 .. _objects_properties:
 
-Object properties
------------------
+Свойства объектов
+------------------
 
-We can find the properties of defined objects by calling the built-in
-predicate :ref:`predicates_object_property_2`:
+Мы можем найти свойства заданных и созданных динамически объектов, вызвав встроенный предикат :ref:'predicates_object_property_2':
 
 .. code-block:: text
 
    | ?- object_property(Object, Property).
 
-The following object properties are supported:
+Поддерживаются следующие свойства объектов:
 
 ``static``
-   The object is static
+   Объект статический
 ``dynamic``
-   The object is dynamic (and thus can be abolished in runtime by
-   calling the :ref:`predicates_abolish_object_1` built-in predicate)
+   Объект является динамическим: он может быть удален во время выполнения программы при помощи встроенного предиката  :ref:'predicates_abolish_object_1'
 ``built_in``
-   The object is a built-in object (and thus always available)
+   Этот обхект встроен в систему, он доступен всегда
 ``threaded``
-   The object supports/makes multi-threading calls
+   Объект поддерживает и делает вызовы в режиме multi-threading
 ``file(Path)``
-   Absolute path of the source file defining the object (if applicable)
+   Абсолютное местонахождение файла с исходным кодом, где объект определяется, если в принципе он таким образом был заданг
 ``file(Basename, Directory)``
-   Basename and directory of the source file defining the object (if
-   такой имеется); ``Directory`` всегда заканчивается ``/``
+   Имя файла и каталог исходного файла, определяющего объект (если таковое определение есть в наличии); значение переменной ``Directory`` всегда заканчивается на ``/``
 ``lines(BeginLine, EndLine)``
-   Source file begin and end lines of the object definition (if
-   applicable)
+   В исходном файле данный объект определен между этими строками (если применимо)
 ``context_switching_calls``
-   The object supports context switching calls (i.e. can be used with
-   the :ref:`control_context_switch_2` debugging control construct)
+   Объект поддерживает вызовы с переключением контекста (т.е. может использоваться с конструкцией управления :ref:`control_context_switch_2`)
 ``dynamic_declarations``
-   The object supports dynamic declarations of predicates
+   Объект поддерживает динамические декларации предикатов
 ``events``
-   Messages sent from the object generate events
+   Сообщения, отправленные с объекта, генерируют события
 ``source_data``
-   Source data available for the object
+   Исходный код доступен для данного объекта
 ``complements(Permission)``
-   The object supports complementing categories with the specified
-   permission (``allow`` or ``restrict``)
+   Объект поддерживает дополнение категориями с указанным разрешением («разрешить» (allow) или «ограничить» (restrict))
 ``complements``
-   The object supports complementing categories
+   Объект поддерживает дополнение категориями
 ``public(Resources)``
-   List of public predicates and operators declared by the object
+   Список публичных предикатов и операторов, заданных в объекте
 ``protected(Resources)``
-   List of protected predicates and operators declared by the object
+   Список защищенных предикатов и операторов, заданных в объекте
 ``private(Resources)``
-   List of private predicates and operators declared by the object
+   Список приватных предикатов и операторов, заданных в объекте
 ``declares(Predicate, Properties)``
-   List of :ref:`properties <grammar_entity_properties>` for a predicate declared by the object
+   Список :ref:`properties <grammar_entity_properties>` для некоторого предиката, заданного в объекте
 ``defines(Predicate, Properties)``
    List of :ref:`properties <grammar_entity_properties>` for a predicate defined by the object
 ``includes(Predicate, Entity, Properties)``
@@ -763,8 +624,8 @@ The following object properties are supported:
    значение ``Call`` не может быть основным термом в случае вызова управляющей control
    структуры, если ее аргумент известен только во время выполнения; свойства
    включают ``caller(Caller)``, ``alias(Alias)`` и
-   ``line_count(Line)``, при этом и ``Caller`` и ``Alias`` - 
-   это предикаты, а ``Line`` - номер строки, где 
+   ``line_count(Line)``, при этом и ``Caller`` и ``Alias`` -
+   это предикаты, а ``Line`` - номер строки, где
    в предикате или директиве выполняется вызов
 ``updates(Predicate, Properties)``
    Список :ref:`properties <grammar_entity_properties>` динамических обновлений предикатов (а также доступ
