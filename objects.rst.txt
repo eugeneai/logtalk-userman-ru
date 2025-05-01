@@ -21,17 +21,6 @@
 Objects
 =======
 
-The main goal of Logtalk objects is the encapsulation and reuse of
-predicates. Instead of a single database containing all your code,
-Logtalk objects provide separated namespaces or databases allowing the
-partitioning of code in more manageable parts. Logtalk is a *declarative
-programming language* and does not aim to bring some sort of new dynamic
-state change concept to Logic Programming or Prolog.
-
-Logtalk, defines two built-in objects, :ref:`user <apis:user/0>` and
-:ref:`logtalk <apis:logtalk/0>`, which are described at the end of this
-section.
-
 Основной целью создания объектов в Logtalk является инкапсуляция и повторное использование предикатов. Вместо единой базы данных, содержащей весь код, объекты Logtalk предоставляют отдельные пространства имен или базы данных, позволяющие разделять код на части, которыми проще манипулировать. Logtalk является декларативным языком программирования и не стремится привнести какую-то новую концепцию динамического изменения состояния в парадигму логического программирования, в частности, язык Пролог.
 
 Logtalk определяет два встроенных объекта :ref:`user <apis:user/0>` и :ref:`logtalk <apis:logtalk/0>`, которые описаны в конце этого раздела.
@@ -45,8 +34,6 @@ Logtalk определяет два встроенных объекта :ref:`us
 В Logtalk есть только три типа объектов инкапсуляции: *объекты*, *протоколы* и *категории*. Logtalk использует термин «объект» в широком смысле. Термины «прототип», «родитель», «класс», «подкласс», «суперкласс», «метакласс» и «инстанция» всегда обозначают объект.
 
 Различные названия используются, чтобы подчеркнуть *роль*, которую играет объект в определенном контексте. То есть, мы используем термин, отличный от "объект" (object), когда мы хотим сделать отношения с другими объектами явными. Например, объект, включающий отношение *создание экземпляра* с другим объектом играет роль *экземпляра*, в то время как объект, из которого порождаются экземпляры, играет роль *класса*; объект, включающий отношение *специализация* с другим объектом играет роль *подкласса*, в то время как *объект-специализация* играет роль *суперкласса*; объект, включающий отношение *расширение* с другим объектом играет роль *прототипа*, аналогично специализации объекта. Объект, не имеющий отношения с другими объектами, всегда интерпретируется как *прототип*.  В Logtalk отношения сущностей по существу определяют *паттерны* (шаблонные решения) повторного использования кода.  Программный элемент компилируется в соответствии с ролями, которые он играет в программе.
-
-Logtalk allows you to work from standalone objects to any kind of hierarchy, either >>=based or >>=based. You may use single or multiple inheritance, use or forgo metaclasses, implement reflective designs, use parametric objects, and take advantage of protocols and categories (think components).
 
 Logtalk позволяет создавать разнообразные иерархии объектов, начиная с автономных, либо на основе иерархии *прототипов*, либо на основе иерархии *классов*.  Вы можете использовать одиночное или множественное наследование, использовать метаклассы или отказаться от них вообще, реализовывать конструкции-отражения, использовать параметрические объекты, протоколы и категории (компоненты, реализующие некоторый шаблонный способ решения задачи).
 
@@ -72,10 +59,6 @@ Classes are used to represent abstractions of common properties of sets of objec
 --------------------------
 
 Мы можем определить новый объект так же, как мы пишем код Prolog - с помощью текстового редактора. Исходные файлы Logtalk могут включать в себя один или несколько объектов, катирий и протоколов.  Если вы предпочитаете определять каждую сущность в собственном исходном файле, рекомендуется, чтобы файл был назван именем задаваемого объекта. По умолчанию все исходные файлы Logtalk используют расширение ``.lgt``, однако, это можно поменять в файлах-адаптерах конкретных систем Prolog-программирования.  Промежуточные исходные файлы Prolog, генерируемые компилятором Logtalk, по умолчанию имеют суффикс ``_lgt`` и расширение ``.pl``. Опять же, это можно настроить в соответствии с потребностями конкретного компилятора Prolog в соответствующем файле-адаптере. Например, мы можем определить объект под названием «vehicle» и сохранить его в исходном файле «vehicle.lgt», который будет скомпилирован в файл «vehicle_lgt.pl».  Файл Prolog (в зависимости от :term:`backend compiler <backend Prolog compiler>`), имена промежуточных файлов Prolog могут включать в себя знак "хэш" имени каталога и идентификатор процесса для предотвращения коллизии имен файлов при встраивании приложений Logtalk или при запуске параллельных процессов Logtalk.
-
-Object names can be atoms or compound terms (when defining parametric objects, see below). Objects, categories, and protocols share the same name space: we cannot have an object with the same name as a protocol or a category.
-
-Object code (directives and predicates) is textually encapsulated by using two Logtalk directives: :ref:`directives_object_1_5` and :ref:`directives_end_object_0`. The most simple object will be one that is self-contained, not depending on any other Logtalk entity:
 
 Названиями объектов могут выступать и атомы и составные термы. В последнем случае определяется так называемый параметризованный объект.  Объекты, категории и протоколы разделяют общее пространство имен: нельзя задать объект с таким же названием, как протокол или категория.
 
@@ -115,9 +98,7 @@ Object code (directives and predicates) is textually encapsulated by using two L
        ...
    :- end_object.
 
-In object-oriented programming objects are usually organized in hierarchies that enable interface and code sharing by inheritance. In Logtalk, we can construct prototype-based hierarchies by writing:
-
-использовать интерфейс и код через наследование. В Logtalk мы можем построить иерархии на основе прототипов, написав:
+В объектно-ориентированном программировании объекты обычно организованы в иерархии, которые позволяют совместно использовать интерфейс и код через наследование. В Logtalk же мы можем построить иерархии и на основе прототипов, написав:
 
 ::
 
@@ -125,8 +106,6 @@ In object-oriented programming objects are usually organized in hierarchies that
        extends(Parent)).
        ...
    :- end_object.
-
-We can also have class-based hierarchies by defining instantiation and specialization relations between objects. To define an object as a class instance we will write:
 
 Мы также можем создавать иерархии классов, определяя отношения специализации и создания экземпляра между объектами. Чтобы определить объект как экземпляр класса, создадим код, поддобный этому:
 
@@ -202,8 +181,6 @@ We can also have class-based hierarchies by defining instantiation and specializ
 
 Обратите внимание, что при помощи этих отношений создания экземпляра и специализации «object», «class» и «abstract_class» являются одновременно классами и экземплярами какого-либо класса. Кроме того, каждый объект наследует свои собственные предикаты и предикаты двух других объектов без какой-либо петлевого наследования.
 
-When a full-blown reflective system solution is not needed, the above scheme can be simplified by making an object an instance of itself, i.e.  by making a class its own metaclass. Например:
-
 Когда не требуется создавать полномасштабный авриант рефлективной системы, показанная выше схема упрощается: надо сделать некоторый объект экземпляром самого себя, и, конкретно, сделать класс своим собственным метаклассом. Пример:
 
 ::
@@ -213,10 +190,8 @@ When a full-blown reflective system solution is not needed, the above scheme can
        ...
    :- end_object.
 
-We can use, in the same application, both prototype and class-based hierarchies (and freely exchange messages between all objects). We cannot however mix the two types of hierarchies by, e.g., specializing an object that extends another object in this current Logtalk version.
 
 Допускается использование в одном приложении как иерархии прототипов, так и иерархии классо, при этом все объекты могут свободно обмениваться сообщениями друг с другом.  В настоящее время не разрешается смешивать два типа иерархий, например, специализируя объект, который расширяет другой объект Logtalk.
-
 
 Logtalk также поддерживает публичное (public), защищенное (protected) и приватное (private) наследование. Смотрите  раздел :ref:`inheritance <inheritance_scope>` для детального изучения данного предмета.
 
@@ -256,10 +231,7 @@ Logtalk также поддерживает публичное (public), защ�
 
 Оба варианта одинаково эффективны, поскольку вызовы методов «this/1» и «parameter/2» обычно компилируются в виде унификации с заголовком.  Недостатком второго решения является то, что вынуждены проверять все вызовы «this/1», если изменим струткуру названия объекта. Обратите внимание, что мы не можем использовать этот метод с операторами отправки сообщений (ref: 'control_send_to_object_2', :ref:'control_send_to_self_1' или :ref:'control_call_super_1').
 
-
 Третий вариант доступа к параметрам объекта — использование переменных-параметров :term:`parameter variables <parameter variable>`.  Несмотря на то, что переменные-параметры вводят понятие глобальных переменных сущности, их уникальный синтаксис «_ParameterName_» позволяет избежать конфликтов и делает их легко узнаваемыми. Например:
-
-A third alternative to access object parameters is to use :term:`parameter variables <parameter variable>`. Although parameter variables introduce a concept of entity global variables, their unique syntax, ``_ParameterName_``, avoids conflicts and makes them easily recognizable. For example:
 
 ::
 
@@ -288,8 +260,6 @@ A third alternative to access object parameters is to use :term:`parameter varia
 
 Перечисление заданных в программе и порожденных объектов
 --------------------------------------------------------
-
-We can find, by backtracking, all defined objects by calling the :ref:`predicates_current_object_1` built-in predicate with a unbound argument:
 
 Перечисление объектов, известных в прграмме, реализуется при помощи бэктрекинга встроенного предиката :ref:'predicates_current_object_1', причем его аргмент должен быть несвязанным (var):
 
@@ -425,8 +395,6 @@ Another common initialization goal is a message to *self* in order to call an in
 Динамические объекты
 ~~~~~~~~~~~~~~~~~~~~
 
-Similar to Prolog predicates, an object can be either static or dynamic.  An object created during the execution of a program is always dynamic.  An object defined in a file can be either dynamic or static. Dynamic objects are declared by using the :ref:`directives_dynamic_0` directive in the object source code:
-
 Подобно предикатам Пролога, объект может быть либо статическим, либо динамическим. Объект, созданный во время выполнения программы, будет всегда динамическим. Объект, определенный в тексте файла, может быть и динамическим, и статическим. Динамические объекты объявляются с помощью директивы :ref:'directives_dynamic_0' в исходном коде определения объекта:
 
 ::
@@ -539,7 +507,6 @@ Logtalk предоставляет шесть наборов встроенны�
 .. code-block:: text
 
    | ?- conforms_to_protocol(Object, Protocol, Scope).
-
 
 Обратите внимание, если использовать свободный первый аргумент, нам нужно будет использовать встроенный предикат :ref:'predicates_current_object_1', чтобы гарантировать, что возвращаемая сущность является объектом, а не категорией.
 
@@ -667,14 +634,10 @@ Logtalk предоставляет шесть наборов встроенны�
 ``module``
    The object resulted from the compilation of a Prolog module
 
-When a predicate is called from an ``initialization/1`` directive, the
-argument of the ``caller/1`` property is ``:-/1``.
+Если предикат вызывается директивой «initialization/1», аргументом свойства «caller/1» будет «:-/1».
 
-Some properties such as line numbers are only available when the object is
-defined in a source file compiled with the :ref:`source_data <flag_source_data>`
-flag turned on. Кроме того, номера строк поддерживаются только в
-:term:`backend Prolog compilers<backend Prolog compiler>`,
-которые предоставляют доступ к начальной строке в процедуре чтения терма. Когда такая поддержка недоступна, возвращается значение ``-1`` и для начальной и для конечной строк.
+Некоторые свойства, такие как номера строк, доступны только тогда, когда объект определен в файле, скомпилированном с включенным флагом :ref:`source_data <flag_source_data>`. Кроме того, номера строк поддерживаются только в
+:term:`backend Prolog compilers<backend Prolog compiler>`, которые предоставляют доступ к начальной строке в процедуре чтения терма. Когда такая поддержка недоступна, возвращается значение ``-1`` и для начальной и для конечной строк.
 
 Свойства, возвращающие количество фраз (правил), выдают фразы (правила), которые *текстово определены в объекте* как для многофайловых, так и для не-многофайловых предикатов. Таким образом, эти числа исключают фразы (правила)
 для многофайловых предикатов *добавленных* другими сущностями.
@@ -684,38 +647,20 @@ flag turned on. Кроме того, номера строк поддержив�
 Built-in objects
 ----------------
 
-Logtalk defines some built-in objects that are always available for any
-application.
+Logtalk определяет некоторые встроенные объекты, которые всегда доступны в любом приложении.
 
 .. _objects_user:
 
-The built-in pseudo-object ``user``
+Встроенный предикат ``user``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The built-in :ref:`user <apis:user/0>` pseudo-object virtually contains all
-user predicate definitions not encapsulated in a Logtalk entity (or a Prolog
-module for backends supporting a module system). These predicates are
-assumed to be implicitly declared public. Messages sent from this
-pseudo-object, which includes messages sent from the top-level interpreter,
-generate events when the default value of the :ref:`events <flag_events>`
-flag is set to ``allow``. Defining complementing categories for this
-pseudo-object is not supported.
+Встроенный псевдообъект :ref:`user <apis:user/0>` фактически содержит все определения предикатов пользователя, не инкапсулированные в объекте Logtalk (или модуль Prolog для бэкэндов, поддерживающих модульную систему). Предполагается, что эти предикаты неявно объявлены публичными. Сообщения, отправленные с этого псевдообъекта, включая и сообщения, отправленные с интерпретатора верхнего уровня, генерируют события, когда значение по умолчанию флага :ref:`events <flag_events>` равно значению «разрешён» (allow). Определение дополняющих категорий для этого псевдообъекта не поддерживается.
 
-With some of the :term:`backend Prolog compilers <backend Prolog compiler>`
-that support a module system, it is possible to load (the) Logtalk
-(compiler/runtime) into a module other than the pseudo-module ``user``. In
-this case, the Logtalk pseudo-object ``user`` virtually contains all user
-predicate definitions defined in the module where Logtalk was loaded.
+Некоторые :term:`backend Prolog compilers <backend Prolog compiler>`, поддерживающие систему модулей, могут оформлять компилятор Logtalk и его среду исполнения в отдельный модуль, отличный от псевдомодуля "user". В этом случае псевдообъект «user» фактически содержит все определения предикатов пользователя, определенные в модуле, где был загружен Logtalk.
 
 .. _objects_logtalk:
 
-The built-in object ``logtalk``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Встроеннвй объект ``logtalk``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The built-in :ref:`logtalk <apis:logtalk/0>` object provides
-:ref:`message printing <printing_messages>` predicates,
-:ref:`question asking <printing_questions>` predicates,
-:ref:`debug and trace event <debugging_events>` predicates, predicates for
-accessing the internal database of loaded files and their properties, and
-also a set of low-level utility predicates normally used when defining hook
-objects. Consult its API documentation for details.
+Встроенный обхект :ref:`logtalk <apis:logtalk/0>` включает в себя предикаты :ref:`message printing <printing_messages>`, предикаты :ref:`question asking <printing_questions>`, предикаты :ref:`debug and trace event <debugging_events>`, а также предикаты для доступа к внутренней базе данных загруженных файлов и их свойствам, а также набору низкоуровневых вспомогательных предикатов, обычно используемых при определении хук-объектов. Проконсультируйтесь с его документацией API для получения подробной информации.
